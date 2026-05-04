@@ -12,8 +12,8 @@ It generates personalized movie recommendations based on user-selected movies us
 * ⚡ FastAPI backend (high performance)
 * 💻 React (Vite) frontend UI
 * 📊 Analytics dashboard (top movies, trends)
-* 💾 Redis caching (optional)
-* 🗄️ PostgreSQL analytics storage (optional)
+* 💾 Redis caching
+* 🗄️ PostgreSQL analytics storage
 * 🔥 Real-time recommendation API
 
 ---
@@ -204,5 +204,5 @@ VITE_API_URL=http://localhost:8000
 ---
 
 ## 👨‍💻 Author
-
-Built as a **Full-Stack + Machine Learning portfolio project**.
+**Giridhar B**  
+🔗 [GitHub Profile](https://github.com/Giridhar-B)  
