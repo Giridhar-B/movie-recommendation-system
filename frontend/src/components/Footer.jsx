@@ -15,7 +15,7 @@ export default function Footer() {
       </p>
 
       <a
-        href="https://github.com/your-username/movie-recommender"
+        href="https://github.com/Giridhar-B/movie-recommendation-system"
         target="_blank"
         rel="noopener noreferrer"
         className="text-blue-500 underline mt-2 inline-block"
