@@ -102,7 +102,7 @@ export default function About() {
         </h2>
 
         <a
-          href="github.com/Giridhar-B/movie-recommendation-system"
+          href="https://github.com/Giridhar-B/movie-recommendation-system"
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 underline"
