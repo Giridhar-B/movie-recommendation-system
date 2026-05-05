@@ -2,7 +2,6 @@ from fastapi import FastAPI, Query, HTTPException
 import pandas as pd
 import psycopg2
 from psycopg2 import OperationalError
-import redis
 import json
 from fastapi.middleware.cors import CORSMiddleware
 from collections import Counter
@@ -13,6 +12,7 @@ import torch.nn.functional as F
 import os
 import random
 from dotenv import load_dotenv
+from upstash_redis import Redis
 
 load_dotenv()
 
@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# DB Connection
+# DB CONNECTION (Supabase - Render safe)
 conn = None
 cursor = None
 
@@ -38,55 +38,53 @@ try:
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         port=os.getenv("DB_PORT"),
+        sslmode="require",
         connect_timeout=5
     )
     cursor = conn.cursor()
     print("DB connected")
 
 except Exception as e:
-    print("DB not connected")
-    print(str(e))
+    print("DB not connected:", str(e))
     conn = None
     cursor = None
 
-# Redis (SAFE)
+
+# REDIS (Upstash REST - recommended)
+
+redis_client = None
+
 try:
-    redis_client = redis.Redis(
-        host=os.getenv("REDIS_HOST"),
-        port=int(os.getenv("REDIS_PORT") or 6379),
-        password=os.getenv("REDIS_PASSWORD"),
-        decode_responses=True,
-        ssl=True,
-        socket_connect_timeout=5,
-        socket_timeout=5
+    redis_client = Redis(
+        url=os.getenv("UPSTASH_REDIS_REST_URL"),
+        token=os.getenv("UPSTASH_REDIS_REST_TOKEN")
     )
-    redis_client.ping()
-    print("Redis connected")
+    print("Upstash Redis connected")
 
 except Exception as e:
-    print("Redis not connected")
-    print(str(e))
+    print("Redis not connected:", str(e))
     redis_client = None
 
 
-# Base directory
+# BASE PATH
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Load Data
+
+# LOAD DATA
 movies_path = os.path.join(BASE_DIR, "data", "movies.csv")
 movies_df = pd.read_csv(movies_path)
 
-# Safer mapping
 movie_dict = movies_df.to_dict(orient="index")
 
-# Load Embeddings
+
+# LOAD EMBEDDINGS
 user_emb_path = os.path.join(BASE_DIR, "embeddings", "user.pt")
 item_emb_path = os.path.join(BASE_DIR, "embeddings", "item.pt")
 
 user_emb = torch.load(user_emb_path, map_location=torch.device("cpu"))
 item_emb = torch.load(item_emb_path, map_location=torch.device("cpu"))
 
-# IMPORTANT: Normalize
+# Normalize embeddings (important for cosine similarity)
 user_emb = F.normalize(user_emb, dim=1)
 item_emb = F.normalize(item_emb, dim=1)
 
