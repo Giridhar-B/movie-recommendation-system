@@ -316,6 +316,7 @@ def analytics():
         raise HTTPException(status_code=500, detail=str(e))
 
 # HEALTH
-@app.get("/health")
+
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     return {"status": "ok"}
