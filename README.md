@@ -206,4 +206,4 @@ VITE_API_URL=http://localhost:8000
 ## 👨‍💻 Author
 **Giridhar B**  
 🔗 [GitHub Profile](https://github.com/Giridhar-B)  
-🎬 [Live Link]([https://github.com/Giridhar-B](https://movie-recommendation-system-flax-nine.vercel.app/))  
+🎬 [Live Link](https://movie-recommendation-system-flax-nine.vercel.app/)  
